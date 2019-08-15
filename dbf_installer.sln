@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "dbf_installer", "dbf_installer\dbf_installer.vdproj", "{E6C421A6-BC07-4214-A5EF-01E7E0E4C076}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbf", "dbf\dbf.csproj", "{2506C520-30DF-4795-93FB-D4DC96E10B1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6C421A6-BC07-4214-A5EF-01E7E0E4C076}.Debug|Any CPU.ActiveCfg = Release
+		{E6C421A6-BC07-4214-A5EF-01E7E0E4C076}.Debug|Any CPU.Build.0 = Release
+		{E6C421A6-BC07-4214-A5EF-01E7E0E4C076}.Release|Any CPU.ActiveCfg = Release
+		{E6C421A6-BC07-4214-A5EF-01E7E0E4C076}.Release|Any CPU.Build.0 = Release
+		{2506C520-30DF-4795-93FB-D4DC96E10B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2506C520-30DF-4795-93FB-D4DC96E10B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2506C520-30DF-4795-93FB-D4DC96E10B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2506C520-30DF-4795-93FB-D4DC96E10B1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {030DDEE4-0215-45A5-B692-3AFD63F2A6A4}
+	EndGlobalSection
+EndGlobal
