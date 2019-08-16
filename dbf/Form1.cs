@@ -29,7 +29,7 @@ namespace dbf
         DataTable dt2 = new DataTable();
         DataTable dt3 = new DataTable();
         
-        string dbf_constring, dbf_constring1, dbf_constring2,s_without_ext,;
+        string dbf_constring, dbf_constring1, dbf_constring2,s_without_ext;
         string[] filePaths;
 
         public Form1()
@@ -119,6 +119,12 @@ namespace dbf
             int j = filePaths.Length;
             foreach (string dbf_filepath_series in filePaths)
             {
+                label2.Invoke((MethodInvoker)delegate {
+                    label2.Text = dbf_filepath_series;
+                });
+                dataGridView1.Invoke((MethodInvoker)delegate {
+                    dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath_series);
+                });
                 //dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath_series);
                 //label2.Text = dbf_filepath_series;
                 i =i+1;
@@ -220,7 +226,7 @@ namespace dbf
                 dbf_filepath = dbfselect.FileName;
                 dbf_filename_withext = Path.GetFileNameWithoutExtension(dbf_filepath) + Path.GetExtension(dbf_filepath);
                 dbf_filename = Path.GetFileNameWithoutExtension(dbf_filepath);
-                label2.Text = dbf_filepath + "    " + dbf_filename;
+                //label2.Text = dbf_filepath + "    " + dbf_filename;
                 panel1.Visible = true;
 
                 
