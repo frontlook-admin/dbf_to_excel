@@ -1,5 +1,4 @@
-﻿using frontlook;
-using Microsoft.Office.Interop.Excel;
+﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -162,7 +161,7 @@ namespace dbf
                     DA.Fill(dt);
                     //DA.Update(dt);
                     connection.Close();
-                    excel_data_interop.DataTableToExcel(dt, Path.GetDirectoryName(s) + @"\" + Path.GetFileNameWithoutExtension(s));
+                    //excel_data_interop.DataTableToExcel(dt, Path.GetDirectoryName(s) + @"\" + Path.GetFileNameWithoutExtension(s));
                 }
                 catch (OleDbException e)
                 {
