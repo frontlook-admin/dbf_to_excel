@@ -12,6 +12,7 @@ using System.Data.Odbc;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using frontlook_csharp_library.excel_data_interop;
+using frontlook_csharp_library.dbf_helper;
 using System.Threading;
 
 namespace dbf
@@ -28,9 +29,8 @@ namespace dbf
         DataTable dt2 = new DataTable();
         DataTable dt3 = new DataTable();
         
-        string dbf_constring, dbf_constring1, dbf_constring2,s_without_ext;
-        int x = 0;
-        int y = 0;
+        string dbf_constring, dbf_constring1, dbf_constring2,s_without_ext,;
+        string[] filePaths;
 
         public Form1()
         {
@@ -67,6 +67,26 @@ namespace dbf
             }
         }
 
+
+        private void Db_viewer_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try_1();
+        }
+
+
+        private void Db_viewer_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+
+        private void Db_viewer_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+
+
         private void Dbf_to_excel_series_Click(object sender, EventArgs e)
         {
             //dbf_folder_selection();
@@ -75,7 +95,7 @@ namespace dbf
                 dbf_folder_selection();
                 if (!dbf_to_excel_series_worker.IsBusy)
                 {
-
+                    dbf_to_excel_series_worker.WorkerReportsProgress = true;
                     dbf_to_excel_series_worker.RunWorkerAsync();
                 }
             }
@@ -84,7 +104,7 @@ namespace dbf
                 
                 if (!dbf_to_excel_series_worker.IsBusy)
                 {
-
+                    dbf_to_excel_series_worker.WorkerReportsProgress = true;
                     dbf_to_excel_series_worker.RunWorkerAsync();
                 }
             }
@@ -94,21 +114,34 @@ namespace dbf
         
         private void Dbf_to_excel_series_worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            data_to_excel.dbf_to_xls_series(dbf_filepath);
+            dbf_to_excel_series_worker.ReportProgress((5));
+            int i = 0;
+            int j = filePaths.Length;
+            foreach (string dbf_filepath_series in filePaths)
+            {
+                //dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath_series);
+                //label2.Text = dbf_filepath_series;
+                i =i+1;
+                excel_data_interop.fl_data_to_xls(dbf_filepath_series);
+                dbf_to_excel_series_worker.ReportProgress((i * 100 / j));
+            }
+            
+            //excel_data_interop.dbf_to_xls_series(dbf_filepath);
         }
 
         
         private void Dbf_to_excel_series_worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
-            int prog = e.ProgressPercentage;
-            
+            label3.Text = e.ProgressPercentage + "%";
+            progress.Value = e.ProgressPercentage;
         }
 
         
         private void Dbf_to_excel_series_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
+            MessageBox.Show("Done..!!", "Work Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //dbf_to_excel_series_worker.ReportProgress(0);
+            progress.Value = 0;
         }
 
         private void Dbf_to_excel_single_Click(object sender, EventArgs e)
@@ -136,7 +169,7 @@ namespace dbf
 
         private void Db_to_excel_single_worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            data_to_excel.dbf_to_xls_single(dbf_filepath);
+            excel_data_interop.dbf_to_xls_single(dbf_filepath);
         }
 
         private void Db_to_excel_single_worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -144,7 +177,7 @@ namespace dbf
 
         }
 
-        private void Db_to_excel_single_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+         private void Db_to_excel_single_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
         }
@@ -194,10 +227,46 @@ namespace dbf
                 FileInfo fileInfo = new FileInfo(dbf_filepath);
                 string directoryFullPath = fileInfo.DirectoryName;
                 string x = Path.GetDirectoryName(dbf_filepath);
-
+                string[] filePaths1;
+                //string[] filepath_null;
+                filePaths1 = Directory.GetFiles(x, "*.dbf");
+                filePaths = filePaths1;
                 //excel_data_interop.dbf_to_xls_series(dbf_filepath);
             }
+            else if(dbfselect.ShowDialog() == DialogResult.Cancel|| dbfselect.ShowDialog() == DialogResult.None)
+            {
+                dbf_filepath = string.Empty;
+                dbf_filename_withext = string.Empty;
+                dbf_filename = string.Empty;
+                //filePaths = string[] filepath_null;
+            }
+            else
+            {
+                dbf_filepath = string.Empty;
+                dbf_filename_withext = string.Empty;
+                dbf_filename = string.Empty;
+
+            }
         }
+
+        private void Test_Click(object sender, EventArgs e)
+        {
+            if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
+            {
+
+                dbf_folder_selection();
+                try_1();
+                //db_viewer.RunWorkerAsync();
+            }
+            else
+            {
+                dataGridView1.DataSource = "";
+                try_1();
+                //db_viewer.RunWorkerAsync();
+            }
+        }
+
+
 
         protected void view_db_in_grid()
         {
@@ -226,7 +295,7 @@ namespace dbf
             {
                 MessageBox.Show("Error : " + e.Message);
             }*/
-            dataGridView1.DataSource = frontlook_csharp_library.data_helper.data_helper1.data(dbf_filepath);
+            dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath);
         }
 
         /*protected void dbf_selection()
@@ -262,6 +331,27 @@ namespace dbf
                 //dbf_file_open();
             }
         }*/
+
+
+        protected void try_1()
+        {
+            excel_data_interop.fl_data_to_xls(dbf_filepath);
+         //   MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.fl_odbc_execute_command());
+            /*FileInfo fileInfo = new FileInfo(dbf_filepath);
+            string directoryFullPath = fileInfo.DirectoryName;
+            string x = Path.GetDirectoryName(dbf_filepath);
+            string[] filePaths;
+            filePaths = Directory.GetFiles(x, "*.dbf");
+            foreach(string s in filePaths)
+            {
+                MessageBox.Show("Ok"+"   "+fl_dbf_helper.get_os()+"   "+fl_dbf_helper.constring(dbf_filepath));
+                dataGridView1.DataSource = null;
+                dataGridView1.Refresh();
+                dataGridView1.DataSource = fl_dbf_helper.data(s);
+                
+            }*/
+            //view_db_in_grid();
+        }
     }
 }
 
