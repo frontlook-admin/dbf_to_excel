@@ -119,16 +119,16 @@ namespace dbf
             int j = filePaths.Length;
             foreach (string dbf_filepath_series in filePaths)
             {
+                i =i+1;
                 label2.Invoke((MethodInvoker)delegate {
                     label2.Text = dbf_filepath_series;
                 });
+                DataTable dt = data_to_excel.fl_data_to_xls_with_datatable(dbf_filepath_series);
                 dataGridView1.Invoke((MethodInvoker)delegate {
-                    dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath_series);
+                    dataGridView1.DataSource = dt;
                 });
                 //dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath_series);
                 //label2.Text = dbf_filepath_series;
-                i =i+1;
-                excel_data_interop.fl_data_to_xls(dbf_filepath_series);
                 dbf_to_excel_series_worker.ReportProgress((i * 100 / j));
             }
             
@@ -175,7 +175,7 @@ namespace dbf
 
         private void Db_to_excel_single_worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            excel_data_interop.dbf_to_xls_single(dbf_filepath);
+            data_to_excel.fl_data_to_xls(dbf_filepath);
         }
 
         private void Db_to_excel_single_worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -226,6 +226,7 @@ namespace dbf
                 dbf_filepath = dbfselect.FileName;
                 dbf_filename_withext = Path.GetFileNameWithoutExtension(dbf_filepath) + Path.GetExtension(dbf_filepath);
                 dbf_filename = Path.GetFileNameWithoutExtension(dbf_filepath);
+                MessageBox.Show(dbf_filename);
                 //label2.Text = dbf_filepath + "    " + dbf_filename;
                 panel1.Visible = true;
 
@@ -341,7 +342,8 @@ namespace dbf
 
         protected void try_1()
         {
-            excel_data_interop.fl_data_to_xls(dbf_filepath);
+            //data_to_excel.fl_data_to_xls(dbf_filepath);
+            data_to_excel.fl_data_to_xls_multiple_datatable_in_single_excel_file(dbf_filepath);
          //   MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.fl_odbc_execute_command());
             /*FileInfo fileInfo = new FileInfo(dbf_filepath);
             string directoryFullPath = fileInfo.DirectoryName;
