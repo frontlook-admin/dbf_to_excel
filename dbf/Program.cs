@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace dbf
 {
@@ -23,6 +26,8 @@ namespace dbf
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            AppCenter.Start("e1d87209-73bf-42c0-975c-c8c4ccef9037",
+                   typeof(Analytics), typeof(Crashes));
             Application.Run(new Form1());
         }
     }

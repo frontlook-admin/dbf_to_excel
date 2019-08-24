@@ -10,6 +10,7 @@ using System.IO;
 using System.Data.OleDb;
 using System.Data.Odbc;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using frontlook_csharp_library.excel_data_interop;
 using frontlook_csharp_library.dbf_helper;
@@ -258,9 +259,11 @@ namespace dbf
 
         private void Test_Click(object sender, EventArgs e)
         {
-            if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
+            var ci = new CultureInfo("en-IN");
+            MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.fl_get_os());
+            /*if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
             {
-
+                
                 dbf_folder_selection();
                 try_1();
                 //db_viewer.RunWorkerAsync();
@@ -270,7 +273,7 @@ namespace dbf
                 dataGridView1.DataSource = "";
                 try_1();
                 //db_viewer.RunWorkerAsync();
-            }
+            }*/
         }
 
 
@@ -342,9 +345,38 @@ namespace dbf
 
         protected void try_1()
         {
+            /*SELECTED VNO AND ALL BATCH*/
+            //SELECT bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,smast.SDES,aconf.ADD1,aconf.ADD2,aconf.ADD3,(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00530' AND bill.MPT='M') AS SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.mpt='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00530'
+
+            /*SELECTED VNO AND BATCH*/
+            //SELECT bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,smast.SDES AS SDES,aconf.ADD1,aconf.ADD2,aconf.ADD3,(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00533' AND bill.MPT='M') AS TSDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.mpt='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00533' AND billmed.BATCH='904'
+
+
+
+            string query1 = "SELECT " +
+                "smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3," +
+                "(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES " +
+                "FROM " +
+                "[billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD " +
+                "AND " +
+                "bill.VNO='00534'";
+
+            //query.Text = query1;
+
+            dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
+            
+            
+            
+            /*DataSet all_ds = dbf_helper.get_all_datatable_in_dataset(filePaths);
+            var a = "SELECT * FROM '" + all_ds + "'.BILLMED";
+            all_ds.Tables[0].Select()
+            */
+
+
+
             //data_to_excel.fl_data_to_xls(dbf_filepath);
-            data_to_excel.fl_data_to_xls_multiple_datatable_in_single_excel_file(dbf_filepath);
-         //   MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.fl_odbc_execute_command());
+            //data_to_excel.fl_data_to_xls_multiple_datatable_in_single_excel_file(dbf_filepath);
+            //   MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.fl_odbc_execute_command());
             /*FileInfo fileInfo = new FileInfo(dbf_filepath);
             string directoryFullPath = fileInfo.DirectoryName;
             string x = Path.GetDirectoryName(dbf_filepath);
