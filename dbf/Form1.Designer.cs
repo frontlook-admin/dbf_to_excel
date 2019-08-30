@@ -35,6 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dbf_to_excel_series_worker = new System.ComponentModel.BackgroundWorker();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             this.test = new System.Windows.Forms.Button();
             this.stop = new System.Windows.Forms.Button();
             this.clear = new System.Windows.Forms.Button();
@@ -51,6 +52,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.query = new System.Windows.Forms.RichTextBox();
+            this.rv = new Microsoft.Reporting.WinForms.ReportViewer();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -86,6 +88,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.test);
             this.panel2.Controls.Add(this.stop);
             this.panel2.Controls.Add(this.clear);
@@ -99,13 +102,23 @@
             this.panel2.Size = new System.Drawing.Size(168, 483);
             this.panel2.TabIndex = 1;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(3, 418);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(162, 53);
+            this.button2.TabIndex = 0;
+            this.button2.Text = "TEST";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // test
             // 
             this.test.Location = new System.Drawing.Point(3, 357);
             this.test.Name = "test";
             this.test.Size = new System.Drawing.Size(162, 53);
             this.test.TabIndex = 0;
-            this.test.Text = "TEST";
+            this.test.Text = "EXECUTE QUERY";
             this.test.UseVisualStyleBackColor = true;
             this.test.Click += new System.EventHandler(this.Test_Click);
             // 
@@ -263,11 +276,20 @@
             // query
             // 
             this.query.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.query.ForeColor = System.Drawing.Color.Crimson;
             this.query.Location = new System.Drawing.Point(67, 45);
             this.query.Name = "query";
             this.query.Size = new System.Drawing.Size(1172, 149);
             this.query.TabIndex = 13;
             this.query.Text = "";
+            // 
+            // rv
+            // 
+            this.rv.Location = new System.Drawing.Point(0, 0);
+            this.rv.Name = "ReportViewer";
+            this.rv.ServerReport.BearerToken = null;
+            this.rv.Size = new System.Drawing.Size(396, 246);
+            this.rv.TabIndex = 0;
             // 
             // Form1
             // 
@@ -314,6 +336,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RichTextBox query;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private Microsoft.Reporting.WinForms.ReportViewer rv;
+        private System.Windows.Forms.Button button2;
     }
 }
 

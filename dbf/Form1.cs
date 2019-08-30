@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Data.OleDb;
-using System.Data.Odbc;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using frontlook_csharp_library.excel_data_interop;
-using frontlook_csharp_library.dbf_helper;
-using System.Threading;
+using frontlook_csharp_library.FL_Dbf_Helper;
 
 namespace dbf
 {
@@ -124,11 +113,11 @@ namespace dbf
                 label2.Invoke((MethodInvoker)delegate {
                     label2.Text = dbf_filepath_series;
                 });
-                DataTable dt = data_to_excel.fl_data_to_xls_with_datatable(dbf_filepath_series);
+                DataTable dt = FL_DbfData_To_Excel.FL_data_to_xls_with_datatable(dbf_filepath_series);
                 dataGridView1.Invoke((MethodInvoker)delegate {
                     dataGridView1.DataSource = dt;
                 });
-                //dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath_series);
+                //dataGridView1.DataSource = dbf_helper.FL_dbf_datatable(dbf_filepath_series);
                 //label2.Text = dbf_filepath_series;
                 dbf_to_excel_series_worker.ReportProgress((i * 100 / j));
             }
@@ -176,7 +165,7 @@ namespace dbf
 
         private void Db_to_excel_single_worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            data_to_excel.fl_data_to_xls(dbf_filepath);
+            FL_DbfData_To_Excel.FL_data_to_xls(dbf_filepath);
         }
 
         private void Db_to_excel_single_worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -199,7 +188,22 @@ namespace dbf
             dataGridView1.Refresh();
         }
 
-
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(DateTime.Now.ToString());
+            MessageBox.Show("OS Version: "+frontlook_csharp_library.FL_General.FL_Os_Helper.FL_get_os());
+           /* var ci = new CultureInfo("en-IN");
+            var cu = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
+            var cd = CultureInfo.CurrentCulture.DateTimeFormat.GetAllDateTimePatterns();
+            MessageBox.Show(Thread.CurrentThread.CurrentCulture.ToString());
+            MessageBox.Show(CultureInfo.CurrentCulture.Name + "1");
+            CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+            var cf_d = currentCulture.DateTimeFormat.ShortDatePattern;
+            var cf_t = currentCulture.DateTimeFormat.LongTimePattern;
+            MessageBox.Show(cf_d + " 1 "+cf_t+" 2 "+ currentCulture.DateTimeFormat.FullDateTimePattern+" 3 "+ 
+                currentCulture.DateTimeFormat.SortableDateTimePattern+" 4 "+ currentCulture.DateTimeFormat.LongDatePattern);*/
+            //MessageBox.Show(DateTime.ParseExact(DateTime.Now.ToString(),cf_d+" "+cf_t,ci,DateTimeStyles.AssumeLocal).ToString());
+        }
 
         protected void dbf_folder_selection()
         {
@@ -259,23 +263,48 @@ namespace dbf
 
         private void Test_Click(object sender, EventArgs e)
         {
-            var ci = new CultureInfo("en-IN");
-            MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.fl_get_os());
-            /*if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
+            //var ci = new CultureInfo("en-IN");
+            //MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.FL_get_os());
+            if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
             {
                 
                 dbf_folder_selection();
                 try_1();
+                fast_report();
                 //db_viewer.RunWorkerAsync();
             }
             else
             {
                 dataGridView1.DataSource = "";
                 try_1();
-                //db_viewer.RunWorkerAsync();
-            }*/
+                
+            }
         }
 
+
+        public void fast_report()
+        {
+            string query1 = "SELECT " +
+                            "smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3," +
+                            "(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES " +
+                            "FROM " +
+                            "[billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD " +
+                            "AND " +
+                            "bill.VNO='00534'";
+            /*
+             SELECT smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3, (SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00534'
+             */
+            DataSet ds = new DataSet("client info");
+            ds.Tables.Add(FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query1));
+            SqlServerTypes.Utilities.LoadNativeAssemblies(AppDomain.CurrentDomain.BaseDirectory);
+            //ReportViewer rv = new ReportViewer();
+            rv.ShowPrintButton = true;
+            rv.ShowProgress=true;
+            //Report r = new LocalReport();
+            //r.DisplayName = "BILL";
+            //rv.LocalReport.DataSources = ds.Tables[0];
+
+        }
 
 
         protected void view_db_in_grid()
@@ -305,7 +334,7 @@ namespace dbf
             {
                 MessageBox.Show("Error : " + e.Message);
             }*/
-            dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath);
+            dataGridView1.DataSource = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath);
         }
 
         /*protected void dbf_selection()
@@ -363,7 +392,8 @@ namespace dbf
 
             //query.Text = query1;
 
-            dataGridView1.DataSource = dbf_helper.fl_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
+            dataGridView1.DataSource = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
+            //dataGridView1.DataSource = 
             
             
             
@@ -374,9 +404,9 @@ namespace dbf
 
 
 
-            //data_to_excel.fl_data_to_xls(dbf_filepath);
-            //data_to_excel.fl_data_to_xls_multiple_datatable_in_single_excel_file(dbf_filepath);
-            //   MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.fl_odbc_execute_command());
+            //data_to_excel.FL_data_to_xls(dbf_filepath);
+            //data_to_excel.FL_data_to_xls_multiple_datatable_in_single_excel_file(dbf_filepath);
+            //   MessageBox.Show(frontlook_csharp_library.database_helper.database_helper.FL_odbc_execute_command());
             /*FileInfo fileInfo = new FileInfo(dbf_filepath);
             string directoryFullPath = fileInfo.DirectoryName;
             string x = Path.GetDirectoryName(dbf_filepath);
@@ -384,10 +414,10 @@ namespace dbf
             filePaths = Directory.GetFiles(x, "*.dbf");
             foreach(string s in filePaths)
             {
-                MessageBox.Show("Ok"+"   "+fl_dbf_helper.get_os()+"   "+fl_dbf_helper.constring(dbf_filepath));
+                MessageBox.Show("Ok"+"   "+FL_dbf_helper.get_os()+"   "+FL_dbf_helper.constring(dbf_filepath));
                 dataGridView1.DataSource = null;
                 dataGridView1.Refresh();
-                dataGridView1.DataSource = fl_dbf_helper.data(s);
+                dataGridView1.DataSource = FL_dbf_helper.data(s);
                 
             }*/
             //view_db_in_grid();
