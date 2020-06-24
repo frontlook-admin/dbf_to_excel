@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="aceBackup" Class="acebackuplinqDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aceBackup.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="dbf.Properties.Settings" SettingsPropertyName="aceBackup" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Comp" Member="Comps">
+    <Type Name="Comp">
+      <Column Name="CompId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CompPath" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="BackInterval" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IntervalType" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="BackUpLocation" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="LastBackup" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Comp_PathData" Member="PathDatas" ThisKey="CompId" OtherKey="CompId" Type="PathData" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PathData" Member="PathDatas">
+    <Type Name="PathData">
+      <Column Name="PathId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CompId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Path" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Association Name="Comp_PathData" Member="Comp" ThisKey="CompId" OtherKey="CompId" Type="Comp" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

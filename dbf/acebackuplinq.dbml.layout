@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="acebackuplinq">
+  <DataContextMoniker Name="/acebackuplinqDataContext" />
+  <nestedChildShapes>
+    <classShape Id="ca6bda86-90d7-46d9-b7e2-6492df497277" absoluteBounds="0.625, 0.5, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/acebackuplinqDataContext/Comp" />
+      <nestedChildShapes>
+        <elementListCompartment Id="72e6a984-8c79-46dc-9d21-709562274115" absoluteBounds="0.63999999999999968, 0.96, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2b0c6277-9fdc-46bd-a1c7-a332651c74a6" absoluteBounds="3.625, 0.75, 2, 1.3862939453125">
+      <DataClassMoniker Name="/acebackuplinqDataContext/PathData" />
+      <nestedChildShapes>
+        <elementListCompartment Id="27df75fb-1675-4d33-9f83-731fbc4f9f4b" absoluteBounds="3.6399999999999997, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.625 : 1.44314697265625); (3.625 : 1.44314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/acebackuplinqDataContext/Comp/Comp_PathData" />
+      <nodes>
+        <classShapeMoniker Id="ca6bda86-90d7-46d9-b7e2-6492df497277" />
+        <classShapeMoniker Id="2b0c6277-9fdc-46bd-a1c7-a332651c74a6" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

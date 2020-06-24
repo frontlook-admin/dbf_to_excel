@@ -29,6 +29,7 @@ namespace dbf
 
         public Form1()
         {
+
             InitializeComponent();
             dbf_filepath = string.Empty;
             dbf_filename = string.Empty;
