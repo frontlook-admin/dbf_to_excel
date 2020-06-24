@@ -4,6 +4,9 @@ using System.Data;
 using System.Windows.Forms;
 using System.IO;
 using frontlook_csharp_library.FL_Dbf_Helper;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace dbf
 {
@@ -19,6 +22,8 @@ namespace dbf
         DataTable dt2 = new DataTable();
         DataTable dt3 = new DataTable();
         
+        public List<compList> CompList { get; set; }
+
         string dbf_constring, dbf_constring1, dbf_constring2,s_without_ext;
         string[] filePaths;
 
@@ -77,116 +82,14 @@ namespace dbf
 
 
 
-        private void Dbf_to_excel_series_Click(object sender, EventArgs e)
-        {
-            //dbf_folder_selection();
-            if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
-            {
-                dbf_folder_selection();
-                if (!dbf_to_excel_series_worker.IsBusy)
-                {
-                    dbf_to_excel_series_worker.WorkerReportsProgress = true;
-                    dbf_to_excel_series_worker.RunWorkerAsync();
-                }
-            }
-            else
-            {
-                
-                if (!dbf_to_excel_series_worker.IsBusy)
-                {
-                    dbf_to_excel_series_worker.WorkerReportsProgress = true;
-                    dbf_to_excel_series_worker.RunWorkerAsync();
-                }
-            }
-            
-        }
+        
 
         
-        private void Dbf_to_excel_series_worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            dbf_to_excel_series_worker.ReportProgress((5));
-            int i = 0;
-            int j = filePaths.Length;
-            foreach (string dbf_filepath_series in filePaths)
-            {
-                i =i+1;
-                label2.Invoke((MethodInvoker)delegate {
-                    label2.Text = dbf_filepath_series;
-                });
-                DataTable dt = FL_DbfData_To_Excel.FL_data_to_xls_with_datatable(dbf_filepath_series);
-                dataGridView1.Invoke((MethodInvoker)delegate {
-                    dataGridView1.DataSource = dt;
-                });
-                //dataGridView1.DataSource = dbf_helper.FL_dbf_datatable(dbf_filepath_series);
-                //label2.Text = dbf_filepath_series;
-                dbf_to_excel_series_worker.ReportProgress((i * 100 / j));
-            }
-            
-            //excel_data_interop.dbf_to_xls_series(dbf_filepath);
-        }
+        
 
         
-        private void Dbf_to_excel_series_worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            label3.Text = e.ProgressPercentage + "%";
-            progress.Value = e.ProgressPercentage;
-        }
-
         
-        private void Dbf_to_excel_series_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            MessageBox.Show("Done..!!", "Work Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //dbf_to_excel_series_worker.ReportProgress(0);
-            progress.Value = 0;
-        }
 
-        private void Dbf_to_excel_single_Click(object sender, EventArgs e)
-        {
-            if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
-            {
-                dbf_folder_selection();
-                if (!db_to_excel_single_worker.IsBusy)
-                {
-                    db_to_excel_single_worker.RunWorkerAsync();
-                }
-            }
-            else
-            {
-                
-                if (!db_to_excel_single_worker.IsBusy)
-                {
-                    db_to_excel_single_worker.RunWorkerAsync();
-                }
-            }
-            
-        }
-
-
-
-        private void Db_to_excel_single_worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            FL_DbfData_To_Excel.FL_data_to_xls(dbf_filepath);
-        }
-
-        private void Db_to_excel_single_worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
-
-         private void Db_to_excel_single_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
-
-        private void Clear_Click(object sender, EventArgs e)
-        {
-            dbf_filepath = string.Empty;
-            dbf_filename = string.Empty;
-            dbf_filename_withext = string.Empty;
-            dataGridView1.DataSource = null;
-            dataGridView1.Refresh();
-        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -212,7 +115,7 @@ namespace dbf
             {
                 InitialDirectory = @"C:\",
                 RestoreDirectory = true,
-                Filter = "DBF files (*.dbf)|*.dbf|All files (*.*)|*.*",
+                Filter = "Comp DBF files|comp.dbf|DBF files|*.dbf|All files (*.*)|*.*",
                 FilterIndex = 1,
                 Title = "Select DBF File",
                 CheckFileExists = true,
@@ -334,9 +237,54 @@ namespace dbf
             {
                 MessageBox.Show("Error : " + e.Message);
             }*/
-            dataGridView1.DataSource = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath);
+            var dt = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath,
+                "SELECT datapath,ccod FROM `" + s_without_ext + "`;");
+            var d = new List<compList>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(dt.Rows[i]["datapath"].ToString()))
+                {
+                    var _cl = new compList
+                    {
+                        dataList = dt.Rows[i]["datapath"].ToString(),
+                        ccod = dt.Rows[i]["ccod"].ToString()
+                    };
+                    d.Add(_cl);
+                    checkedListBox1.Items.Add(Path.Combine(_cl.dataList,_cl.ccod).ToString());
+                }
+            }
+            
+
+            dataGridView1.DataSource = dt;
+        }
+        private static List<compList> ConvertDataTable<T>(DataTable dt)
+        {
+            List<compList> data = new List<compList>();
+            foreach (DataRow row in dt.Rows)
+            {
+                compList item = GetItem<compList>(row);
+                data.Add(item);
+            }
+            return data;
         }
 
+        private static compList GetItem<compList>(DataRow dr)
+        {
+            Type temp = typeof(compList);
+            compList obj = Activator.CreateInstance<compList>();
+
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in temp.GetProperties())
+                {
+                    if (pro.Name == column.ColumnName)
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    else
+                        continue;
+                }
+            }
+            return obj;
+        }
         /*protected void dbf_selection()
         {
             OpenFileDialog dbfselect = new OpenFileDialog
@@ -422,6 +370,13 @@ namespace dbf
             }*/
             //view_db_in_grid();
         }
+    }
+
+    public class compList
+    {
+        public string dataList { get; set; }
+        public string ccod { get; set; }
+        public string _path { get; set; }
     }
 }
 
