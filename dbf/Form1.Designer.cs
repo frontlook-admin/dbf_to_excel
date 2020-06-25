@@ -37,26 +37,28 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.Test = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.view_db = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ExecuteQuery = new System.Windows.Forms.Button();
+            this.save = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.query = new System.Windows.Forms.RichTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.ExecuteQuery = new System.Windows.Forms.Button();
-            this.view_db = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.save = new System.Windows.Forms.Button();
-            this.Test = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -123,12 +125,14 @@
             // 
             this.panel6.Controls.Add(this.Test);
             this.panel6.Controls.Add(this.comboBox1);
+            this.panel6.Controls.Add(this.textBox2);
             this.panel6.Controls.Add(this.textBox1);
             this.panel6.Controls.Add(this.maskedTextBox1);
             this.panel6.Controls.Add(this.panel7);
             this.panel6.Controls.Add(this.label2);
             this.panel6.Controls.Add(this.button1);
             this.panel6.Controls.Add(this.view_db);
+            this.panel6.Controls.Add(this.label1);
             this.panel6.Controls.Add(this.label3);
             this.panel6.Controls.Add(this.ExecuteQuery);
             this.panel6.Controls.Add(this.save);
@@ -137,6 +141,65 @@
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(1237, 185);
             this.panel6.TabIndex = 17;
+            // 
+            // Test
+            // 
+            this.Test.BackColor = System.Drawing.Color.LightPink;
+            this.Test.Location = new System.Drawing.Point(728, 65);
+            this.Test.Name = "Test";
+            this.Test.Size = new System.Drawing.Size(162, 53);
+            this.Test.TabIndex = 0;
+            this.Test.Text = "TEST OS";
+            this.Test.UseVisualStyleBackColor = false;
+            this.Test.Click += new System.EventHandler(this.Test_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.BackColor = System.Drawing.Color.Aquamarine;
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Second",
+            "Minute",
+            "Hour",
+            "Day",
+            "Week",
+            "Month",
+            "Year"});
+            this.comboBox1.Location = new System.Drawing.Point(551, 76);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(116, 24);
+            this.comboBox1.TabIndex = 4;
+            // 
+            // textBox2
+            // 
+            this.textBox2.BackColor = System.Drawing.Color.Aquamarine;
+            this.textBox2.Location = new System.Drawing.Point(505, 6);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(162, 20);
+            this.textBox2.TabIndex = 5;
+            this.textBox2.Click += new System.EventHandler(this.textBox1_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.Color.Aquamarine;
+            this.textBox1.Location = new System.Drawing.Point(505, 43);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(162, 20);
+            this.textBox1.TabIndex = 5;
+            this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
+            // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.BackColor = System.Drawing.Color.Aquamarine;
+            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maskedTextBox1.Location = new System.Drawing.Point(505, 77);
+            this.maskedTextBox1.Mask = "00";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(36, 23);
+            this.maskedTextBox1.TabIndex = 2;
+            this.maskedTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.maskedTextBox1.ValidatingType = typeof(int);
             // 
             // panel7
             // 
@@ -166,6 +229,83 @@
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(283, 179);
             this.checkedListBox1.TabIndex = 18;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(371, 80);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(119, 20);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Backup Interval";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.LightPink;
+            this.button1.Location = new System.Drawing.Point(728, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(162, 53);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "SELECT DATABASE";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            // 
+            // view_db
+            // 
+            this.view_db.BackColor = System.Drawing.Color.LightPink;
+            this.view_db.Location = new System.Drawing.Point(896, 6);
+            this.view_db.Name = "view_db";
+            this.view_db.Size = new System.Drawing.Size(162, 53);
+            this.view_db.TabIndex = 0;
+            this.view_db.Text = "VIEW DATABASE";
+            this.view_db.UseVisualStyleBackColor = false;
+            this.view_db.Click += new System.EventHandler(this.View_db_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(371, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(127, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Scheduler Name";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(371, 43);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(128, 20);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "Backup Location";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ExecuteQuery
+            // 
+            this.ExecuteQuery.BackColor = System.Drawing.Color.LightPink;
+            this.ExecuteQuery.Location = new System.Drawing.Point(896, 65);
+            this.ExecuteQuery.Name = "ExecuteQuery";
+            this.ExecuteQuery.Size = new System.Drawing.Size(162, 53);
+            this.ExecuteQuery.TabIndex = 0;
+            this.ExecuteQuery.Text = "EXECUTE QUERY";
+            this.ExecuteQuery.UseVisualStyleBackColor = false;
+            this.ExecuteQuery.Click += new System.EventHandler(this.ExecuteQuery_Click);
+            // 
+            // save
+            // 
+            this.save.BackColor = System.Drawing.Color.LightPink;
+            this.save.Location = new System.Drawing.Point(896, 124);
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(162, 53);
+            this.save.TabIndex = 0;
+            this.save.Text = "SAVE";
+            this.save.UseVisualStyleBackColor = false;
+            this.save.Click += new System.EventHandler(this.save_Click);
             // 
             // panel3
             // 
@@ -226,8 +366,8 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.dataGridView1.Location = new System.Drawing.Point(971, 0);
             this.dataGridView1.Name = "dataGridView1";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
@@ -237,41 +377,8 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridView1.Size = new System.Drawing.Size(1237, 405);
+            this.dataGridView1.Size = new System.Drawing.Size(266, 405);
             this.dataGridView1.TabIndex = 2;
-            // 
-            // ExecuteQuery
-            // 
-            this.ExecuteQuery.BackColor = System.Drawing.Color.LightPink;
-            this.ExecuteQuery.Location = new System.Drawing.Point(896, 65);
-            this.ExecuteQuery.Name = "ExecuteQuery";
-            this.ExecuteQuery.Size = new System.Drawing.Size(162, 53);
-            this.ExecuteQuery.TabIndex = 0;
-            this.ExecuteQuery.Text = "EXECUTE QUERY";
-            this.ExecuteQuery.UseVisualStyleBackColor = false;
-            this.ExecuteQuery.Click += new System.EventHandler(this.ExecuteQuery_Click);
-            // 
-            // view_db
-            // 
-            this.view_db.BackColor = System.Drawing.Color.LightPink;
-            this.view_db.Location = new System.Drawing.Point(896, 6);
-            this.view_db.Name = "view_db";
-            this.view_db.Size = new System.Drawing.Size(162, 53);
-            this.view_db.TabIndex = 0;
-            this.view_db.Text = "VIEW DATABASE";
-            this.view_db.UseVisualStyleBackColor = false;
-            this.view_db.Click += new System.EventHandler(this.View_db_Click);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.LightPink;
-            this.button1.Location = new System.Drawing.Point(728, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(162, 53);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "SELECT DATABASE";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // tabPage2
             // 
@@ -282,89 +389,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Modify Scheduled Backup";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(371, 39);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(119, 20);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Backup Interval";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // maskedTextBox1
-            // 
-            this.maskedTextBox1.BackColor = System.Drawing.Color.Aquamarine;
-            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.maskedTextBox1.Location = new System.Drawing.Point(505, 36);
-            this.maskedTextBox1.Mask = "00";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(36, 23);
-            this.maskedTextBox1.TabIndex = 2;
-            this.maskedTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.maskedTextBox1.ValidatingType = typeof(int);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.BackColor = System.Drawing.Color.Aquamarine;
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Second",
-            "Minute",
-            "Hour",
-            "Day",
-            "Week",
-            "Month",
-            "Year"});
-            this.comboBox1.Location = new System.Drawing.Point(551, 35);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(116, 24);
-            this.comboBox1.TabIndex = 4;
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.Color.Aquamarine;
-            this.textBox1.Location = new System.Drawing.Point(505, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(162, 20);
-            this.textBox1.TabIndex = 5;
-            this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(371, 6);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(128, 20);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Backup Location";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // save
-            // 
-            this.save.BackColor = System.Drawing.Color.LightPink;
-            this.save.Location = new System.Drawing.Point(896, 124);
-            this.save.Name = "save";
-            this.save.Size = new System.Drawing.Size(162, 53);
-            this.save.TabIndex = 0;
-            this.save.Text = "SAVE";
-            this.save.UseVisualStyleBackColor = false;
-            this.save.Click += new System.EventHandler(this.save_Click);
-            // 
-            // Test
-            // 
-            this.Test.BackColor = System.Drawing.Color.LightPink;
-            this.Test.Location = new System.Drawing.Point(728, 65);
-            this.Test.Name = "Test";
-            this.Test.Size = new System.Drawing.Size(162, 53);
-            this.Test.TabIndex = 0;
-            this.Test.Text = "TEST OS";
-            this.Test.UseVisualStyleBackColor = false;
-            this.Test.Click += new System.EventHandler(this.Test_Click);
             // 
             // Form1
             // 
@@ -418,6 +442,8 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button save;
         private System.Windows.Forms.Button Test;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

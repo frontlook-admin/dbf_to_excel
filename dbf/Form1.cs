@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
@@ -7,6 +8,15 @@ using frontlook_csharp_library.FL_Dbf_Helper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Win32;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
+using Reg = FluentScheduler.Registry;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+using FluentScheduler;
+using System.Data.Odbc;
+using FLL = frontlook_dotnetframework_library.FL_webpage.FL_DataBase.FL_SqlExecutor;
+using Registry = Microsoft.Win32.Registry;
 
 namespace dbf
 {
@@ -24,6 +34,7 @@ namespace dbf
 
         public List<compList> CompList { get; set; }
 
+        static OdbcConnection con= new OdbcConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\deban\Documents\aceBackup.mdf;Integrated Security=True;Connect Timeout=30");
         string dbf_constring, dbf_constring1, dbf_constring2, s_without_ext;
         string[] filePaths;
 
@@ -79,16 +90,50 @@ namespace dbf
 
         private void save_Click(object sender, EventArgs e)
         {
+            var backUpPath = textBox1.Text;
+            var compFile = dbf_filename_withext;
+            var lst = new List<string>();
+            var sl = (from object t in checkedListBox1.CheckedItems select t.ToString()).ToList();
+            var folderList = checkBox1.Checked ? CompList.Select(l=>l._path): sl;
+
+            var q = "INSERT INTO comp()";
+
+            var v = new OdbcCommand("", con);
+            FLL.ExecuteCommand(v,"",con);
+
 
         }
 
 
         public void generateScheduler()
         {
-
+            Reg r = new Reg();
+            
+            //r.Schedule<>
         }
 
 
+        public Action doThis()
+        {
+
+            return null;
+        }
+
+        public static void AddApplicationToStartup()
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                key.SetValue("My Program", "\"" + Application.ExecutablePath + "\"");
+            }
+        }
+
+        public static void RemoveApplicationFromStartup()
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                key.DeleteValue("My Program", false);
+            }
+        }
 
         private void ExecuteQuery_Click(object sender, EventArgs e)
         {
@@ -116,7 +161,7 @@ namespace dbf
             {
                 InitialDirectory = @"C:\",
                 RestoreDirectory = true,
-                Filter = "Comp DBF files|comp.dbf|DBF files|*.dbf|All files (*.*)|*.*",
+                Filter = "Comp DBF files|comp*.dbf|DBF files|*.dbf|All files (*.*)|*.*",
                 FilterIndex = 1,
                 Title = "Select DBF File",
                 CheckFileExists = true,
@@ -177,6 +222,7 @@ namespace dbf
 
         public List<compList> DataTableToDataList()
         {
+            checkedListBox1.Items.Clear();
             var d = new List<compList>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -188,7 +234,7 @@ namespace dbf
                         ccod = dt.Rows[i]["ccod"].ToString()
                     };
                     d.Add(_cl);
-                    checkedListBox1.Items.Add(Path.Combine(_cl.dataList, _cl.ccod).ToString());
+                    checkedListBox1.Items.Add(_cl._path);
                 }
             }
 
@@ -199,9 +245,8 @@ namespace dbf
         protected void try_2()
         {
 
-            string query1 = "";
+            string query1 = query.Text;
 
-            query.Text = query1;
 
             dt = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
 
@@ -215,7 +260,12 @@ public class compList
     {
         public string dataList { get; set; }
         public string ccod { get; set; }
-        public string _path { get; set; }
+
+        public string _path
+        {
+            get=>Path.GetFileName(dataList).Equals(ccod)?dataList:Path.Combine(dataList,ccod);
+            set => value = Path.GetFileName(dataList).Equals(ccod) ? dataList : Path.Combine(dataList, ccod);
+        }
     }
 }
 
