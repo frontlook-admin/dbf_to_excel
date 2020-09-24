@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 using System.IO;
+using FastReport;
+using FastReport.Export.PdfSimple;
 using frontlook_csharp_library.FL_Dbf_Helper;
 
 namespace dbf
@@ -190,18 +192,117 @@ namespace dbf
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(DateTime.Now.ToString());
-            MessageBox.Show("OS Version: "+frontlook_csharp_library.FL_General.FL_Os_Helper.FL_get_os());
-           /* var ci = new CultureInfo("en-IN");
-            var cu = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
-            var cd = CultureInfo.CurrentCulture.DateTimeFormat.GetAllDateTimePatterns();
-            MessageBox.Show(Thread.CurrentThread.CurrentCulture.ToString());
-            MessageBox.Show(CultureInfo.CurrentCulture.Name + "1");
-            CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
-            var cf_d = currentCulture.DateTimeFormat.ShortDatePattern;
-            var cf_t = currentCulture.DateTimeFormat.LongTimePattern;
-            MessageBox.Show(cf_d + " 1 "+cf_t+" 2 "+ currentCulture.DateTimeFormat.FullDateTimePattern+" 3 "+ 
-                currentCulture.DateTimeFormat.SortableDateTimePattern+" 4 "+ currentCulture.DateTimeFormat.LongDatePattern);*/
+            //MessageBox.Show(DateTime.Now.ToString());
+            //MessageBox.Show("OS Version: "+frontlook_csharp_library.FL_General.FL_Os_Helper.FL_get_os());
+
+            dataGridView1.DataSource = "";
+            string query1 = "SELECT " +
+                            "smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3," +
+                            "(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES " +
+                            "FROM " +
+                            "[billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD " +
+                            "AND " +
+                            "bill.VNO='00534'";
+            if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
+            {
+
+                dbf_folder_selection();
+
+                var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query1.ToString().Trim());
+                v.TableName = "Table1";
+                //dataGridView1.DataSource = v;
+                /*
+                 SELECT smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3, (SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00534'
+                 */
+                DataSet ds = new DataSet("client_info");
+                
+                ds.Tables.Add(v);
+                //ReportViewer rv = new ReportViewer();
+                rv.ShowPrintButton = true;
+                rv.ShowProgress = true;
+
+                //query.Text = query1;
+
+
+
+                MessageBox.Show(ds.DataSetName);
+
+                dataGridView1.DataSource = ds.Tables["table1"];
+                fast_report();
+                //db_viewer.RunWorkerAsync();
+                using (var report = new Report())
+                {
+                    report.Load("report1.frx");
+                    report.RegisterData(ds, "client_info");
+                    report.Prepare(true);
+                    PDFSimpleExport export = new PDFSimpleExport();
+
+                    report.Export(export, "result.pdf");
+                    //report.SavePrepared("a.pdf");
+                    //report.Save("a.pdf");
+
+                }
+            }
+            else
+            {
+                
+                /*
+                 SELECT smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3, (SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00534'
+                 */
+                var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query1.ToString().Trim());
+                v.TableName = "Table1";
+                dataGridView1.DataSource = v;
+                DataSet ds = new DataSet("client_info");
+                ds.Tables.Add(v);
+                //ReportViewer rv = new ReportViewer();
+                rv.ShowPrintButton = true;
+                rv.ShowProgress = true;
+
+                //query.Text = query1;
+                File.WriteAllText("C:\\Users\\deban\\Desktop\\xml.txt", v.DataSet.GetXml());
+                File.WriteAllText("C:\\Users\\deban\\Desktop\\xml1.txt", v.DataSet.GetXmlSchema());
+                
+
+                MessageBox.Show(ds.DataSetName);
+                using (var report = new Report())
+                {
+                    report.Load("C:\\Users\\deban\\Desktop\\dbtest.frx");
+                    report.RegisterData(ds, "client_info");
+                    report.Prepare(true);
+                    PDFSimpleExport export = new PDFSimpleExport();
+
+                    report.Export(export, "C:\\Users\\deban\\Desktop\\result.pdf");
+                    //report.SavePrepared("a.pdf");
+                    //report.Save("a.pdf");
+                }
+
+            }
+
+
+            
+
+
+            /*using (var report = new Report())
+            {
+                report.Load("report1.frx");
+                report.RegisterData(t, "NorthWind");
+                report.Prepare(true);
+                PDFSimpleExport export = new PDFSimpleExport();
+
+                report.Export(export, "result.pdf");
+                //report.SavePrepared("a.pdf");
+                //report.Save("a.pdf");
+            }*/
+            /* var ci = new CultureInfo("en-IN");
+             var cu = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
+             var cd = CultureInfo.CurrentCulture.DateTimeFormat.GetAllDateTimePatterns();
+             MessageBox.Show(Thread.CurrentThread.CurrentCulture.ToString());
+             MessageBox.Show(CultureInfo.CurrentCulture.Name + "1");
+             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+             var cf_d = currentCulture.DateTimeFormat.ShortDatePattern;
+             var cf_t = currentCulture.DateTimeFormat.LongTimePattern;
+             MessageBox.Show(cf_d + " 1 "+cf_t+" 2 "+ currentCulture.DateTimeFormat.FullDateTimePattern+" 3 "+ 
+                 currentCulture.DateTimeFormat.SortableDateTimePattern+" 4 "+ currentCulture.DateTimeFormat.LongDatePattern);*/
             //MessageBox.Show(DateTime.ParseExact(DateTime.Now.ToString(),cf_d+" "+cf_t,ci,DateTimeStyles.AssumeLocal).ToString());
         }
 
@@ -294,7 +395,7 @@ namespace dbf
             /*
              SELECT smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3, (SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00534'
              */
-            DataSet ds = new DataSet("client info");
+            DataSet ds = new DataSet("client_info");
             ds.Tables.Add(FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query1));
             SqlServerTypes.Utilities.LoadNativeAssemblies(AppDomain.CurrentDomain.BaseDirectory);
             //ReportViewer rv = new ReportViewer();
@@ -391,12 +492,12 @@ namespace dbf
                 "bill.VNO='00534'";
 
             //query.Text = query1;
-
+            var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
             dataGridView1.DataSource = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
             //dataGridView1.DataSource = 
-            
-            
-            
+
+
+
             /*DataSet all_ds = dbf_helper.get_all_datatable_in_dataset(filePaths);
             var a = "SELECT * FROM '" + all_ds + "'.BILLMED";
             all_ds.Tables[0].Select()
@@ -421,6 +522,21 @@ namespace dbf
                 
             }*/
             //view_db_in_grid();
+
+            /*Demo*/
+            /*
+            using (var report = new Report())
+            {
+                report.Load("report1.frx");
+                report.RegisterData(v.DataSet, "NorthWind");
+                report.Prepare(true);
+                PDFSimpleExport export = new PDFSimpleExport();
+
+                report.Export(export, "result.pdf");
+                //report.SavePrepared("a.pdf");
+                //report.Save("a.pdf");
+            }
+            */
         }
     }
 }
