@@ -6,6 +6,7 @@ using System.IO;
 using FastReport;
 using FastReport.Export.PdfSimple;
 using frontlook_csharp_library.FL_Dbf_Helper;
+using frontlook_csharp_library.FL_Excel_Data_Interop;
 
 namespace dbf
 {
@@ -196,20 +197,17 @@ namespace dbf
             //MessageBox.Show("OS Version: "+frontlook_csharp_library.FL_General.FL_Os_Helper.FL_get_os());
 
             dataGridView1.DataSource = "";
-            string query1 = "SELECT " +
-                            "smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3," +
-                            "(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES " +
-                            "FROM " +
-                            "[billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD " +
-                            "AND " +
-                            "bill.VNO='00534'";
+            
             if (dbf_filepath.Equals("") || dbf_filepath.Equals(string.Empty))
             {
 
                 dbf_folder_selection();
 
-                var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query1.ToString().Trim());
+                var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
                 v.TableName = "Table1";
+
+
+                FL_DataTableToExcel_Helper.FL_DataTableToExcel(v, Path.GetDirectoryName(dbf_filename));
                 //dataGridView1.DataSource = v;
                 /*
                  SELECT smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3, (SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00534'
@@ -224,13 +222,12 @@ namespace dbf
                 //query.Text = query1;
 
 
-
                 MessageBox.Show(ds.DataSetName);
 
                 dataGridView1.DataSource = ds.Tables["table1"];
                 fast_report();
                 //db_viewer.RunWorkerAsync();
-                using (var report = new Report())
+                /*using (var report = new Report())
                 {
                     report.Load("report1.frx");
                     report.RegisterData(ds, "client_info");
@@ -241,7 +238,7 @@ namespace dbf
                     //report.SavePrepared("a.pdf");
                     //report.Save("a.pdf");
 
-                }
+                }*/
             }
             else
             {
@@ -249,8 +246,9 @@ namespace dbf
                 /*
                  SELECT smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3, (SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00534'
                  */
-                var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query1.ToString().Trim());
+                var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
                 v.TableName = "Table1";
+                FL_DataTableToExcel_Helper.FL_DataTableToExcel(v, Path.GetDirectoryName(dbf_filename));
                 dataGridView1.DataSource = v;
                 DataSet ds = new DataSet("client_info");
                 ds.Tables.Add(v);
@@ -264,7 +262,7 @@ namespace dbf
                 
 
                 MessageBox.Show(ds.DataSetName);
-                using (var report = new Report())
+                /*using (var report = new Report())
                 {
                     report.Load("C:\\Users\\deban\\Desktop\\dbtest.frx");
                     report.RegisterData(ds, "client_info");
@@ -274,7 +272,7 @@ namespace dbf
                     report.Export(export, "C:\\Users\\deban\\Desktop\\result.pdf");
                     //report.SavePrepared("a.pdf");
                     //report.Save("a.pdf");
-                }
+                }*/
 
             }
 
@@ -475,21 +473,7 @@ namespace dbf
 
         protected void try_1()
         {
-            /*SELECTED VNO AND ALL BATCH*/
-            //SELECT bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,smast.SDES,aconf.ADD1,aconf.ADD2,aconf.ADD3,(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00530' AND bill.MPT='M') AS SDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.mpt='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00530'
-
-            /*SELECTED VNO AND BATCH*/
-            //SELECT bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,smast.SDES AS SDES,aconf.ADD1,aconf.ADD2,aconf.ADD3,(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00533' AND bill.MPT='M') AS TSDES FROM [billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.mpt='M' AND bill.SCOD=aconf.GCOD AND bill.VNO='00533' AND billmed.BATCH='904'
-
-
-
-            string query1 = "SELECT " +
-                "smast.SDES as SDES,bill.DT,billmed.VNO,billmed.BATCH,billmed.EXPDT, bill.MPT,aconf.ADD1,aconf.ADD2,aconf.ADD3," +
-                "(SELECT smast.SDES FROM [smast],[bill] WHERE bill.LCOD=smast.SCOD AND bill.VNO='00534' AND bill.MPT='M') AS TRANSPORT_SDES " +
-                "FROM " +
-                "[billmed],[bill],[smast],[aconf] WHERE billmed.VNO = bill.VNO AND bill.SCOD=smast.SCOD AND bill.MPT='M' AND bill.SCOD=aconf.GCOD " +
-                "AND " +
-                "bill.VNO='00534'";
+            
 
             //query.Text = query1;
             var v = FL_Dbf_Manager.FL_dbf_datatable(dbf_filepath, query.Text.ToString().Trim());
